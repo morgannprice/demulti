@@ -45,6 +45,8 @@ Illumina index (IT001:IT096), a sequence for priming the index read,
 the
 [Earth Microbiome Project](https://earthmicrobiome.org/protocols-and-standards/16s/).
 
+These primer pairs were designed by Adam Deutschbauer and Hans Carlson.
+
 # Scripts
 
 There are two independent ways to analyze the reads:
