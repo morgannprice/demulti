@@ -62,7 +62,9 @@ Run demulti.pl for each input file (i.e., IT001-IT096) and specify which inline 
 To analyze all 96 primers, you can use a bash for loop like this:
 
 ```
-(for i in `seq 1 96`; do nice ~/workbook/dropgrowth/demulti.pl -model 926R -reads IT*${i}_S${i}_L001_R1_001.fastq.gz IT*${i}_S${i}_L001_R2_001.fastq.gz -expect 1,3 -out demulti_S${i}; done) >& demulti.log
+(for i in `seq 1 96`; do
+nice ~/workbook/dropgrowth/demulti.pl -model 926R -reads IT*${i}_S${i}_L001_R{1,2}_001.fastq.gz -expect 1,3 -out demulti_S${i};
+done) >& demulti.log
 ```
 
 # Identifying exact sequence variants with runInline.pl and cleanInline.pl
