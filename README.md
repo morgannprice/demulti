@@ -13,8 +13,8 @@ use perl v5.16.3.)
 If you just want to demultiplex the paired-end reads into new fastq
 files (demulti.pl), then there are no other requirements. If you want
 to identify exact sequence variants, then you'll also need to install
-[PEAR] (https://cme.h-its.org/exelixis/web/software/pear/) and
-[usearch] (http://www.drive5.com/usearch/). You should put these
+[PEAR](https://cme.h-its.org/exelixis/web/software/pear/) and
+[usearch](http://www.drive5.com/usearch/). You should put these
 executables, or symbolic links to these executables, in the demulti/
 directory.
 
@@ -71,7 +71,7 @@ These scripts will remove sequences that are likely to have errors,
 sequences that are rare, and sequences that are likely to be
 chimeras. The defaults are: filter out sequences with more than 1
 expected error and that occur less than 4 times in a sample. Likely chimeras are removed using
-[unoise3] (https://www.drive5.com/usearch/manual/unoise_algo.html).
+[unoise3](https://www.drive5.com/usearch/manual/unoise_algo.html).
 
 First use runInline.pl, then use cleanInline.pl. runInline.pl expects
 that specified directory (-dir) includes fastq or fastq.gz files and
@@ -91,10 +91,10 @@ how often each sequence was observed in each sample.
 # Adding taxonomic information with addSintax.pl
 
 Once you have the output of cleanInline.pl, you can use addSintax.pl to add taxonomic information from usearch's
-[sintax] (https://www.drive5.com/usearch/manual/cmd_sintax.html).
+[sintax](https://www.drive5.com/usearch/manual/cmd_sintax.html).
 
 For addSintax.pl to work, you need to put the sintax database
-[rdp_16s_v16_sp.udb] (https://www.drive5.com/usearch/manual/sintax_downloads.html)
+[rdp_16s_v16_sp.udb](https://www.drive5.com/usearch/manual/sintax_downloads.html)
 in the demulti/ directory.
 
 ```
