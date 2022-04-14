@@ -43,7 +43,7 @@ Illumina index (IT001:IT096), a sequence for priming the index read,
 1-4 Ns, and an initial sequence that matches to 16S at 515F
 (GTGYCAGCMGCCGCGGTAA). These are similar to the updated primers from
 the
-[Earth Microbiome Project] [https://earthmicrobiome.org/protocols-and-standards/16s/].
+[Earth Microbiome Project](https://earthmicrobiome.org/protocols-and-standards/16s/).
 
 # Scripts
 
