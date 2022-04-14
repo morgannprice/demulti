@@ -59,7 +59,7 @@ taxonomic classification from sintax (addSintax.pl).
 
 Run demulti.pl for each input file (i.e., IT001-IT096) and specify which inline primers are expected. This will not filter the reads in any way -- every sequence that has the expecting beginning and ending sequences (including exact matches to the primers) is extracted. (This could produce a large number of fastq files.) Only the portion of the reads inside the primers is maintained.
 
-To analyze all 96 primers, you can use a bash for loop like this:
+To analyze all 96 input files, you can use a bash for loop like this to analyze files with names like IT001_S1_L001_R1_001.fastq.gz:
 
 ```
 (for i in `seq 1 96`; do
