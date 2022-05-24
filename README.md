@@ -65,7 +65,7 @@ To analyze all 96 input files, you can use a bash for loop like this to analyze 
 
 ```
 (for i in `seq 1 96`; do
-nice ~/workbook/dropgrowth/demulti.pl -model 926R -reads IT*${i}_S${i}_L001_R{1,2}_001.fastq.gz -expect 1,3 -out demulti_S${i};
+nice demulti.pl -model 926R -reads IT*${i}_S${i}_L001_R{1,2}_001.fastq.gz -expect 1,3 -out demulti_S${i};
 done) >& demulti.log
 ```
 
