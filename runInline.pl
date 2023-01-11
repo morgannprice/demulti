@@ -148,7 +148,7 @@ sub FileToSample($) {
   $name =~ s/_R[12]_\d+//;
 
   die "Cannot extract sample number from $name"
-    unless $name =~ m/^(IT\d+)/ || $name =~ m/_(IT\d+)/
+    unless $name =~ m/^(IT\d+)/ || $name =~ m/[_-](IT\d+)/
       || $name =~ m/^(S\d+)/ || $name =~ m/_(S\d+)/
       || $name =~ m/^([A-Z][0-9]+)[_.]/;
   die "Cannot parse sample name from file $fileName name $name" unless $1;
