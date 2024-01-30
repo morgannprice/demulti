@@ -11,6 +11,7 @@ my $usearch = "$RealBin/usearch";
 my $parser = "$RealBin/parseInline.pl";
 my $submitter = "$RealBin/submitter.pl";
 my $maxE = 1;
+my $debug;
 
 my $usage = <<END
 Usage: runInline.pl -model 806R -dir indir
@@ -44,7 +45,8 @@ die $usage
                     'usearch=s' => \$usearch,
                     'parser=s' => \$parser,
                     'endSeq=s' => \$endSeq,
-                    'endRange=s' => \$endRange)
+                    'endRange=s' => \$endRange,
+                    'debug' => \$debug)
   && defined $dir;
 die "Invalid max errors, must be positive\n" if $maxE <= 0;
 die "Not a directory: $dir\n" unless -d $dir;
@@ -90,13 +92,19 @@ for (my $i = 0; $i < scalar(@r1); $i++) {
   my $s1 = FileToSample($r1);
   my $s2 = FileToSample($r2);
   die "Mismatched read files, $r1 and $r2\n" unless $s1 eq $s2;
-    push @samples, $s1;
+  push @samples, $s1;
 }
 
-my %samples = map { $_ => 1 } @samples;
-die "Not all sample identifiers are unique. Multiple read files for one sample are not yet supported.\n"
+my %samples = (); # sample to count
+foreach my $sample (@samples) {
+  $samples{$sample}++;
+}
+foreach my $sample (sort keys %samples) {
+  print STDERR "Duplicate sample: $sample\n" if $samples{$sample} > 1;
+}
+print STDERR "Sample names: " . join(" ", sort keys %samples) . "\n";
+die "Not all " . scalar(@samples) . " sample identifiers are unique. Multiple read files for one sample are not yet supported.\n"
   unless scalar(keys %samples) == scalar(@samples);
-print STDERR "Sample names: " . join(" ", @samples) . "\n";
 
 my @pearCmds = ();
 my @usearchCmds = ();
@@ -152,6 +160,7 @@ sub FileToSample($) {
       || $name =~ m/^(S\d+)/ || $name =~ m/_(S\d+)/
       || $name =~ m/^([A-Z][0-9]+)[_.]/;
   die "Cannot parse sample name from file $fileName name $name" unless $1;
+  print STDERR "Sample\t$1\t$fileName\n" if defined $debug;
   return $1;
 }
 
