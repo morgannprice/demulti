@@ -2,6 +2,7 @@
 use strict;
 use Getopt::Long;
 use List::Util qw{sum};
+use Digest::MD5 qw{md5_hex};
 use FindBin qw{$RealBin};
 use lib $RealBin;
 use dmUtils qw{ReadTable ReadFastaEntry};
@@ -9,7 +10,7 @@ sub compareEsvNames($$);
 
 my $usearch = "usearch";
 my $minN = 4;
-my $namePre = "Zotu";
+my $namePre = "";
 my $debug;
 my $minLen = 200;
 
@@ -19,14 +20,16 @@ Input files should be from parseInline.pl
 
 For each sample, filters out rare sequences, uses unoise3 from usearch
 to remove uncommon noisy sequences and chimeras.  Writes out.tsv, with
-a unified table of counts across all samples (with reused arbitrary
-names starting with Zotu), and out.fna, with the actual sequences.
+a unified table of counts across all samples (with arbitrary ESV names
+based on MD5 hashes), and out.fna, with the actual sequence of each
+ESV.
 
 Optional arguments:
 -zotu fastafile -- read in existing names of zotus from the file
 -minN $minN -- ignore sequences with fewer than this reads in a sample
 -usearch $usearch -- the usearch executable
 -name $namePre -- the prefix for each ESV name
+   By default, uses md5 hashes, not prefix number
 -primers 4,6,7 -- ignore primers whose names do not end with these
    numbers
 -debug -- voluminous output from usearch
@@ -163,7 +166,12 @@ foreach my $infile (@infiles) {
       next unless $amptype eq "otu"; # ignore chimeras
       my $row = $numToRow{$num};
       if (!exists $seqToEsv{$row->{sequence}}) {
-        my $newName = $namePre . (1 + scalar(keys %seqToEsv));
+        my $newName;
+        if ($namePre ne "") {
+          $newName = $namePre . (1 + scalar(keys %seqToEsv));
+        } else {
+          $newName = md5_hex($row->{sequence});
+        }
         die "zotu name $newName is already in use!"
           if exists $esvToSeq{$newName};
         $seqToEsv{$row->{sequence}} = $newName;
