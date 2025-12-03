@@ -107,6 +107,10 @@ if (defined $oldFasta) {
   print STDERR "Read " . scalar(keys %esvToSeq) . " ESV names from $oldFasta\n";
 }
 
+
+my $totReadsIn = 0;
+my $totReadsOut = 0;
+
 foreach my $infile (@infiles) {
   my $name = $infile; $name = $1 if $infile =~ m!/([^/]+)$!;
   die "Cannot parse index from $infile"
@@ -129,9 +133,9 @@ foreach my $infile (@infiles) {
     print STDERR "Warning: no rows in $infile with count >= $minN and length >= $minLen and expected primers\n";
     next;
   }
-  print STDERR "Considering " . scalar(@rows) . " sequences ("
-    . sum(map $_->{count}, @rows)
-    . " reads) in $infile\n";
+  my $nReadsThis = sum(map $_->{count}, @rows);
+  $totReadsIn += $nReadsThis;
+  print STDERR "Considering " . scalar(@rows) . " sequences ($nReadsThis reads) in $infile\n";
 
   # For each primer, handle each sample separately
   my %byprimer = ();
@@ -153,7 +157,6 @@ foreach my $infile (@infiles) {
     my $usearchCmd = "$usearch -unoise3 $tmpFna -minsize $minN -ampout $tmpU";
     $usearchCmd .= " -quiet" unless defined $debug;
     system($usearchCmd) == 0 || die "$usearchCmd -- failed: $!";
-    sleep(2) if defined $debug;
     open(my $fhU, "<", $tmpU) || die "Cannot read $tmpU\n";
     while (my $line = <$fhU>) {
       next unless $line =~ m/^>/;
@@ -207,6 +210,7 @@ foreach my $primer (sort keys %counts) {
   foreach my $index (sort keys %$hashP) {
     my $hashI = $counts{$primer}{$index};
     my $tot = sum(values %$hashI);
+    $totReadsOut += $tot;
     foreach my $esv (sort compareEsvNames keys %$hashI) {
       print $fhTab join("\t", $primer, $index, $esv, $hashI->{$esv}, $tot)."\n";
     }
@@ -214,6 +218,8 @@ foreach my $primer (sort keys %counts) {
 }
 close($fhTab) || die "Error writing to $outPre.tab";
 print STDERR "Wrote $outPre.tsv\n";
+print STDERR sprintf("Total kept count: %.2fM of %.2fM input (%.1f%%)\n",
+                     $totReadsOut/1e6, $totReadsIn/1e6, 100*($totReadsOut+1)/($totReadsIn+1));
 
 sub compareEsvNames($$) {
   my ($a,$b) = @_;
