@@ -123,6 +123,8 @@ for(my $i = 0; $i < scalar(@r1); $i++) {
   }
 }
 
+my $statsCmd = "$RealBin/statsInline.pl -dir $dir";
+
 if (defined $test) {
   print "# pear commands\n";
   print join("\n", @pearCmds) . "\n";
@@ -130,10 +132,13 @@ if (defined $test) {
   print join("\n", @usearchCmds) . "\n";
   print "# parse commands\n";
   print join("\n", @parseCmds)."\n";
+  print "# statistics commands\n";
+  print $statsCmd . "\n";
 } else {
   Run(\@pearCmds, "$dir/pear.cmds");
   Run(\@usearchCmds, "$dir/usearch.cmds");
   Run(\@parseCmds, "$dir/parse.cmds");
+  system($statsCmd) == 0 || die "Statistics failed:\n$statsCmd\n$!";
   print STDERR "Finished demultiplexing in $dir -- see $dir/*.parse.tab\n";
   print STDERR "To remove noisy or chimeric reads, use cleanInline.pl, i.e.\n";
   print STDERR "cleanInline.pl -in $dir/*.parse.tab -out $dir/clean\n";
