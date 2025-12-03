@@ -6,7 +6,7 @@ use lib $RealBin;
 use dmUtils qw{ReadTable ReadColumnNames};
 
 my $usearch = "$RealBin/usearch";
-my $db = "$RealBin/rdp_16s_v16_sp.udb";
+my $db = "$RealBin/rdp_16s_v18.udb";
 
 my $usage = <<END
 Usage: addSintax.pl -in clean [ -out clean.sintax.tsv ]

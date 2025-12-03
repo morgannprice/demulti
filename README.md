@@ -97,9 +97,16 @@ how often each sequence was observed in each sample.
 Once you have the output of cleanInline.pl, you can use addSintax.pl to add taxonomic information from usearch's
 [sintax](https://www.drive5.com/usearch/manual/cmd_sintax.html).
 
-For addSintax.pl to work, you need to put the sintax database
-[rdp_16s_v16_sp.udb](https://www.drive5.com/usearch/manual/sintax_downloads.html)
-in the demulti/ directory.
+For addSintax.pl to work, you need to make the sintax version of the
+Ribosomal Database Project, which you can do with these commands:
+
+```
+wget https://www.drive5.com/sintax/rdp_16s_v18.fa.gz
+gunzip rdp_16s_v18.fa.gz
+usearch -makeudb_sintax rdp_16s_v18.fa -output rdp_16s_v18.udb
+```
+
+Once the sintax database is built, you can add taxonomic information with
 
 ```
 addSintax.pl -in mytable
